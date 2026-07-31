@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paint Our Day — Aug 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#EDE7D6;
+    --paper-2:#E3DCC6;
+    --ink:#233229;
+    --ink-soft:#4A5A50;
+    --coral:#D8582E;
+    --teal:#2E6B62;
+    --mustard:#E0A22E;
+    --blush:#C9587B;
+    --line:#233229;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(35,50,41,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,.hand{ font-family:'Caveat', cursive; }
+  .display{ font-family:'Fraunces', serif; }
+
+  /* ambient floating blobs */
+  .blob{ position:fixed; border-radius:50%; filter:blur(0px); opacity:0.35; z-index:0; pointer-events:none; }
+  .blob.b1{ width:260px; height:260px; background:var(--teal); top:-80px; left:-90px; animation: drift1 22s ease-in-out infinite; }
+  .blob.b2{ width:200px; height:200px; background:var(--mustard); top:40%; right:-100px; animation: drift2 26s ease-in-out infinite; }
+  .blob.b3{ width:180px; height:180px; background:var(--blush); bottom:-60px; left:10%; animation: drift1 30s ease-in-out infinite reverse; }
+  @keyframes drift1{ 0%,100%{ transform:translate(0,0) rotate(0deg);} 50%{ transform:translate(30px,40px) rotate(20deg);} }
+  @keyframes drift2{ 0%,100%{ transform:translate(0,0) rotate(0deg);} 50%{ transform:translate(-40px,20px) rotate(-15deg);} }
+
+  .wrap{ position:relative; z-index:1; max-width:760px; margin:0 auto; padding:0 20px 80px; }
+
+  /* HERO */
+  .hero{ text-align:center; padding:90px 0 40px; position:relative; }
+  .stamp{
+    display:inline-block; font-family:'Karla'; font-weight:700; font-size:12px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--paper); background:var(--ink); padding:6px 14px; border-radius:2px;
+    transform:rotate(-3deg); box-shadow:2px 3px 0 rgba(0,0,0,0.15);
+  }
+  .hero h1{ font-size:78px; line-height:0.95; margin:18px 0 6px; color:var(--ink); }
+  .hero h1 span{ color:var(--coral); }
+  .hero p.sub{ font-size:16px; color:var(--ink-soft); margin:0; }
+  .hero p.sub b{ color:var(--teal); }
+
+  .sticker{ position:absolute; user-select:none; animation: float 5s ease-in-out infinite; filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.12)); }
+  @keyframes float{ 0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); } 50%{ transform:translateY(-10px) rotate(var(--r,0deg)); } }
+  .sticker.sun{ top:10px; left:6%; --r:-8deg; animation-delay:0.2s; }
+  .sticker.wave{ top:60px; right:2%; --r:6deg; animation-delay:0.8s; }
+  .sticker.heart{ bottom:-6px; left:20%; --r:10deg; animation-delay:1.4s; }
+  .sticker.brush{ bottom:10px; right:16%; --r:-14deg; animation-delay:0.5s; }
+
+  /* ROUTE STRIP */
+  .route{ display:flex; align-items:center; justify-content:space-between; margin:20px 0 60px; padding:16px 10px; }
+  .route .dot{ display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--ink-soft); flex:1; text-align:center; }
+  .route .dot svg{ width:26px; height:26px; }
+  .route .track{ position:relative; height:2px; background:none; }
+  .route-line{ position:relative; height:2px; border-top:2px dashed var(--ink-soft); margin:0 -10px 8px; }
+
+  /* SECTION LABEL */
+  .section-label{ display:flex; align-items:center; gap:12px; margin:60px 0 26px; }
+  .section-label .tag{ font-family:'Karla'; font-weight:700; font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+    background:var(--mustard); color:var(--ink); padding:5px 12px; border-radius:20px; transform:rotate(-2deg); white-space:nowrap; }
+  .section-label .rule{ flex:1; height:1px; background:var(--ink); opacity:0.25; }
+
+  /* TIMELINE / POLAROIDS */
+  .stop{ display:flex; gap:22px; margin-bottom:34px; opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+  .stop.show{ opacity:1; transform:translateY(0); }
+  .stop.right{ flex-direction:row-reverse; text-align:right; }
+  .stop .time-col{ width:78px; flex-shrink:0; padding-top:14px; text-align:center; }
+  .stop .time-col .clock{ font-family:'Fraunces'; font-weight:600; font-size:14px; }
+  .card{
+    flex:1; background:#fff; padding:14px 14px 18px; border-radius:2px;
+    box-shadow:0 10px 20px rgba(35,50,41,0.12), 0 2px 4px rgba(35,50,41,0.08);
+    transform:rotate(var(--tilt,-1.5deg));
+    transition: transform .3s ease, box-shadow .3s ease;
+    position:relative;
+  }
+  .card:hover{ transform:rotate(0deg) scale(1.02); box-shadow:0 16px 28px rgba(35,50,41,0.18); }
+  .stop:nth-child(odd) .card{ --tilt:-1.5deg; }
+  .stop:nth-child(even) .card{ --tilt:1.5deg; }
+  .card .photo{
+    height:110px; border-radius:2px; display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+    font-size:52px; line-height:1;
+  }
+  .card h3{ font-family:'Fraunces'; font-weight:600; font-size:17px; margin:0 0 6px; }
+  .card p{ font-size:13.5px; color:var(--ink-soft); margin:0 0 8px; line-height:1.5; }
+  .card .tag-row{ display:flex; gap:6px; flex-wrap:wrap; }
+  .pill{ font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; }
+  .washi{ position:absolute; top:-10px; left:50%; transform:translateX(-50%) rotate(-3deg); width:70px; height:20px; opacity:0.85; border-radius:1px; }
+  .badge{
+    position:absolute; top:-16px; right:-14px; width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    box-shadow:2px 3px 0 rgba(0,0,0,0.15); border:2px solid #fff; z-index:2;
+    animation: wiggle 4s ease-in-out infinite;
+  }
+  @keyframes wiggle{ 0%,100%{ transform:rotate(-8deg);} 50%{ transform:rotate(8deg);} }
+  .stop:nth-child(even) .badge{ left:-14px; right:auto; }
+
+  /* palette per stop */
+  .c-teal .photo{ background:#E4F0EC; } .c-teal .pill{ background:#D9EFE9; color:var(--teal); } .c-teal .washi{ background:var(--teal); } .c-teal .badge{ background:var(--teal); }
+  .c-coral .photo{ background:#FBE9E1; } .c-coral .pill{ background:#F7DBCB; color:var(--coral); } .c-coral .washi{ background:var(--coral); } .c-coral .badge{ background:var(--coral); }
+  .c-mustard .photo{ background:#FBF0DA; } .c-mustard .pill{ background:#F5E1B0; color:#8a6414; } .c-mustard .washi{ background:var(--mustard); } .c-mustard .badge{ background:var(--mustard); }
+  .c-blush .photo{ background:#FBE7EE; } .c-blush .pill{ background:#F5D2E0; color:var(--blush); } .c-blush .washi{ background:var(--blush); } .c-blush .badge{ background:var(--blush); }
+  .c-ink .photo{ background:#ECEAE1; } .c-ink .pill{ background:#DEDCD0; color:var(--ink-soft); } .c-ink .washi{ background:var(--ink-soft); } .c-ink .badge{ background:var(--ink-soft); }
+
+  /* RITUAL NOTE */
+  .note{
+    background:#fff; border:1px dashed var(--ink-soft); border-radius:2px; padding:24px 26px; margin:50px 0;
+    position:relative; transform:rotate(-0.6deg);
+  }
+  .note .postmark{ position:absolute; top:-18px; right:24px; width:56px; height:56px; border-radius:50%; border:2px solid var(--coral);
+    display:flex; align-items:center; justify-content:center; font-family:'Caveat'; font-weight:700; color:var(--coral); font-size:13px; transform:rotate(8deg); background:var(--paper); }
+  .note h4{ font-family:'Fraunces'; font-size:16px; margin:0 0 8px; }
+  .note .quote{ font-family:'Caveat'; font-size:26px; color:var(--teal); margin:10px 0 0; }
+
+  /* BUDGET TICKET */
+  .ticket{ background:#fff; border-radius:2px; box-shadow:0 10px 20px rgba(35,50,41,0.1); position:relative; padding:24px 26px; }
+  .ticket::before, .ticket::after{
+    content:""; position:absolute; width:20px; height:20px; background:var(--paper); border-radius:50%; top:50%; margin-top:-10px;
+  }
+  .ticket::before{ left:-10px; } .ticket::after{ right:-10px; }
+  .ticket-row{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(35,50,41,0.2); font-size:14px; }
+  .ticket-row:last-of-type{ border-bottom:none; }
+  .ticket-row.total{ font-family:'Fraunces'; font-weight:600; font-size:17px; padding-top:14px; margin-top:6px; border-top:2px solid var(--ink); border-bottom:none; }
+
+  /* PACKING STICKY NOTES */
+  .sticky-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(110px,1fr)); gap:14px; }
+  .sticky{ padding:14px 10px; border-radius:2px; font-size:13px; font-weight:700; text-align:center;
+    box-shadow:3px 4px 0 rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center; gap:8px;
+    transition: transform .25s ease; cursor:default; }
+  .sticky:hover{ transform:translateY(-4px) rotate(-2deg); }
+  .sticky svg{ width:26px; height:26px; }
+  .sticky:nth-child(6n+1){ background:#FBE9E1; color:var(--coral); }
+  .sticky:nth-child(6n+2){ background:#E4F0EC; color:var(--teal); }
+  .sticky:nth-child(6n+3){ background:#FBF0DA; color:#8a6414; }
+  .sticky:nth-child(6n+4){ background:#FBE7EE; color:var(--blush); }
+  .sticky:nth-child(6n+5){ background:#ECEAE1; color:var(--ink-soft); }
+  .sticky:nth-child(6n+6){ background:#E4F0EC; color:var(--teal); }
+
+  .keepsake{ text-align:center; margin:50px 0; }
+  .keepsake .frame{
+    display:inline-block; background:#fff; padding:14px 14px 44px; border-radius:2px;
+    box-shadow:0 14px 26px rgba(35,50,41,0.16), 0 3px 6px rgba(35,50,41,0.1);
+    transform:rotate(-2deg); position:relative; max-width:280px;
+  }
+  .keepsake .frame img{ display:block; width:100%; border-radius:1px; }
+  .keepsake .frame .washi{ top:-12px; }
+  .keepsake .caption{ font-family:'Caveat'; font-weight:700; font-size:22px; color:var(--ink); margin-top:10px; position:absolute; bottom:10px; left:0; right:0; }
+
+  footer{ text-align:center; margin-top:70px; }
+  footer .hand{ font-size:30px; color:var(--ink); }
+  footer p{ font-size:12px; color:var(--ink-soft); letter-spacing:1px; text-transform:uppercase; }
+
+  @media (max-width:560px){
+    .hero h1{ font-size:52px; }
+    .stop, .stop.right{ flex-direction:column; text-align:left; }
+    .stop .time-col{ width:auto; text-align:left; padding-top:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="stamp">Saturday · Aug 1</span>
+    <h1 class="display">Paint <span>Our</span> Day</h1>
+    <p class="sub">Miyapur → Gachibowli → <b>Osman Sagar</b>, by car, no rush</p>
+
+    <div class="sticker sun" title="sun"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="8" fill="#E0A22E"/><g stroke="#E0A22E" stroke-width="3" stroke-linecap="round"><line x1="20" y1="2" x2="20" y2="8"/><line x1="20" y1="32" x2="20" y2="38"/><line x1="2" y1="20" x2="8" y2="20"/><line x1="32" y1="20" x2="38" y2="20"/><line x1="7" y1="7" x2="11" y2="11"/><line x1="29" y1="29" x2="33" y2="33"/><line x1="7" y1="33" x2="11" y2="29"/><line x1="29" y1="11" x2="33" y2="7"/></g></svg></div>
+    <div class="sticker wave" title="wave"><svg viewBox="0 0 60 30"><path d="M0 18 Q8 6 16 18 T32 18 T48 18 T64 18" fill="none" stroke="#2E6B62" stroke-width="3.5" stroke-linecap="round"/></svg></div>
+    <div class="sticker heart" title="heart"><svg viewBox="0 0 40 36"><path d="M20 34 C-4 18 4 2 20 12 C36 2 44 18 20 34 Z" fill="#C9587B"/></svg></div>
+    <div class="sticker brush" title="brush"><svg viewBox="0 0 40 40"><rect x="17" y="4" width="6" height="18" rx="2" fill="#8a6414"/><path d="M14 20 L26 20 L23 32 Q20 36 17 32 Z" fill="#D8582E"/></svg></div>
+  </section>
+
+  <div class="route">
+    <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>Miyapur</div>
+    <div class="route-line" style="flex:1"></div>
+    <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Temple</div>
+    <div class="route-line" style="flex:1"></div>
+    <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 15l5-5 4 4 5-6 4 4"/></svg>Osman Sagar</div>
+    <div class="route-line" style="flex:1"></div>
+    <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h12"/></svg>Wharf</div>
+  </div>
+
+  <div class="keepsake">
+    <div class="frame">
+      <div class="washi"></div>
+      <img src="us.png" alt="A painted keepsake of the two of you, arm in arm" />
+      <div class="caption">two, pointing at the same horizon</div>
+    </div>
+  </div>
+
+  <div class="section-label"><span class="tag">The plan</span><span class="rule"></span></div>
+
+  <div id="timeline"></div>
+
+  <div class="note">
+    <div class="postmark">1 Aug</div>
+    <h4 class="display">A small ritual</h4>
+    <p style="font-size:13.5px; color:var(--ink-soft); margin:0;">When the painting's done, turn the canvas over and write the date, the place, and one line about the day.</p>
+    <p class="quote">"Our first painting date. We spent more time laughing than painting."</p>
+  </div>
+
+  <div class="section-label"><span class="tag">Pack the bag</span><span class="rule"></span></div>
+  <div class="sticky-grid" id="packing"></div>
+
+  <footer>
+    <p class="hand">see you at 10, don't be late</p>
+    <p>paint messy · laugh loud · drive slow</p>
+  </footer>
+
+</div>
+
+<script>
+const stops = [
+  {time:"10:00 AM", cls:"c-ink", title:"Leave Miyapur", desc:"Playlist queued before you go. Slow drive, windows down, no rush.", tag:"", icon:"🚗", badge:"🎵"},
+  {time:"10:30 AM", cls:"c-teal", title:"Shivalayam Temple, Gachibowli", desc:"30 minutes. A calm start, a short walk, a moment to pause.", tag:"", icon:"🛕", badge:"🙏"},
+  {time:"11:30 AM", cls:"c-ink", title:"Drive to Osman Sagar", desc:"On towards Gandipet. The drive is part of the date.", tag:"~15 min", icon:"🚙", badge:"🛣️"},
+  {time:"11:45 AM", cls:"c-blush", title:"Paint together", desc:"A quiet lake view spot. Paint the scenery, each other, or nothing in particular.", tag:"75 min", icon:"🖼️", badge:"💛"},
+  {time:"1:15 PM", cls:"c-mustard", title:"Lunch, The Fisherman's Wharf", desc:"One starter to share, a pizza, a pasta, two drinks. Take your time.", tag:"", icon:"🍝", badge:"🍕"},
+  {time:"2:45 PM", cls:"c-ink", title:"Scenic drive", desc:"Quieter roads around Osman Sagar and Himayat Sagar. No fixed destination.", tag:"~45 min", icon:"🌄", badge:"🍃"},
+  {time:"3:30 PM", cls:"c-mustard", title:"Optional coffee stop", desc:"One coffee, one dessert to share. No pressure to make this a stop.", tag:"", icon:"☕", badge:"🍰"},
+  {time:"4:15 PM", cls:"c-teal", title:"Head home", desc:"No rushing to squeeze in one last thing. End the day relaxed.", tag:"", icon:"🏡", badge:"💫"}
+];
+
+const timeline = document.getElementById('timeline');
+stops.forEach((s, i) => {
+  const el = document.createElement('div');
+  el.className = 'stop' + (i % 2 ? ' right' : '');
+  el.innerHTML = `
+    <div class="time-col"><div class="clock">${s.time}</div></div>
+    <div class="card ${s.cls}">
+      <div class="washi"></div>
+      <div class="badge">${s.badge}</div>
+      <div class="photo">${s.icon}</div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      ${s.tag ? `<div class="tag-row"><span class="pill">${s.tag}</span></div>` : ''}
+    </div>
+  `;
+  timeline.appendChild(el);
+});
+
+const packItems = [
+  {n:"Paints", i:'<svg viewBox="0 0 40 40"><ellipse cx="20" cy="20" rx="15" ry="11" fill="currentColor" opacity="0.25"/><circle cx="14" cy="16" r="2" fill="currentColor"/><circle cx="24" cy="14" r="2" fill="currentColor"/><circle cx="26" cy="24" r="2" fill="currentColor"/></svg>'},
+  {n:"Brushes", i:'<svg viewBox="0 0 40 40"><rect x="17" y="4" width="6" height="18" rx="2" fill="currentColor"/><path d="M14 20 L26 20 L23 32 Q20 36 17 32 Z" fill="currentColor"/></svg>'},
+  {n:"Canvases", i:'<svg viewBox="0 0 40 40"><rect x="7" y="7" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'},
+  {n:"Small mat", i:'<svg viewBox="0 0 40 40"><rect x="6" y="12" width="28" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'},
+  {n:"Water bottle", i:'<svg viewBox="0 0 40 40"><rect x="14" y="10" width="12" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="17" y="4" width="6" height="6" fill="currentColor"/></svg>'},
+  {n:"Wet wipes", i:'<svg viewBox="0 0 40 40"><rect x="6" y="12" width="28" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="21" r="4" fill="currentColor" opacity="0.3"/></svg>'},
+  {n:"Trash bag", i:'<svg viewBox="0 0 40 40"><path d="M10 12 H30 L27 34 H13 Z" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'},
+  {n:"Cap / sunglasses", i:'<svg viewBox="0 0 40 40"><path d="M6 24 a14 10 0 0 1 28 0" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="14" cy="24" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="24" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>'},
+  {n:"Sunscreen", i:'<svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="6" fill="currentColor" opacity="0.35"/><rect x="14" y="20" width="12" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'},
+  {n:"A little love note", i:'<svg viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M7 11 L20 24 L33 11" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M20 30 C16 26 12 26 12 22 C12 19 16 19 20 22 C24 19 28 19 28 22 C28 26 24 26 20 30 Z" fill="currentColor"/></svg>'}
+];
+const packing = document.getElementById('packing');
+packItems.forEach(p => {
+  const el = document.createElement('div');
+  el.className = 'sticky';
+  el.innerHTML = `${p.i}<span>${p.n}</span>`;
+  packing.appendChild(el);
+});
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+}, {threshold:0.15});
+document.querySelectorAll('.stop').forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>
