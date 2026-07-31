@@ -64,11 +64,14 @@
   .sticker.brush{ bottom:10px; right:16%; --r:-14deg; animation-delay:0.5s; }
 
   /* ROUTE STRIP */
-  .route{ display:flex; align-items:center; justify-content:space-between; margin:20px 0 60px; padding:16px 10px; }
+  .route{ display:flex; align-items:center; justify-content:space-between; margin:20px 0 60px; padding:16px 10px; position:relative; }
   .route .dot{ display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--ink-soft); flex:1; text-align:center; }
   .route .dot svg{ width:26px; height:26px; }
   .route .track{ position:relative; height:2px; background:none; }
   .route-line{ position:relative; height:2px; border-top:2px dashed var(--ink-soft); margin:0 -10px 8px; }
+  .traveler{ position:absolute; top:30px; left:4%; transform:translate(-50%,-50%); font-size:19px; z-index:3;
+    animation: travel 9s ease-in-out infinite alternate; filter:drop-shadow(1px 2px 0 rgba(0,0,0,0.12)); }
+  @keyframes travel{ 0%{ left:4%; } 100%{ left:94%; } }
 
   /* SECTION LABEL */
   .section-label{ display:flex; align-items:center; gap:12px; margin:60px 0 26px; }
@@ -196,6 +199,7 @@
   </section>
 
   <div class="route">
+    <div class="traveler" aria-hidden="true">🛵</div>
     <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>Miyapur</div>
     <div class="route-line" style="flex:1"></div>
     <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Temple</div>
@@ -236,9 +240,9 @@
 
 <script>
 const stops = [
-  {time:"10:00 AM", cls:"c-ink", title:"Leave Miyapur", desc:"Playlist queued before you go. Slow drive, windows down, no rush.", tag:"", icon:"🚗", badge:"🎵"},
+  {time:"10:00 AM", cls:"c-ink", title:"Leave Miyapur", desc:"Playlist queued before you go. Slow drive, windows down, no rush.", tag:"", icon:"🛵", badge:"🎵"},
   {time:"10:30 AM", cls:"c-teal", title:"Shivalayam Temple, Gachibowli", desc:"30 minutes. A calm start, a short walk, a moment to pause.", tag:"", icon:"🛕", badge:"🙏"},
-  {time:"11:30 AM", cls:"c-ink", title:"Drive to Osman Sagar", desc:"On towards Gandipet. The drive is part of the date.", tag:"~15 min", icon:"🚙", badge:"🛣️"},
+  {time:"11:30 AM", cls:"c-ink", title:"Drive to Osman Sagar", desc:"On towards Gandipet. The drive is part of the date.", tag:"~15 min", icon:"🛵", badge:"🛣️"},
   {time:"11:45 AM", cls:"c-blush", title:"Paint together", desc:"A quiet lake view spot. Paint the scenery, each other, or nothing in particular.", tag:"75 min", icon:"🖼️", badge:"💛"},
   {time:"1:15 PM", cls:"c-mustard", title:"Lunch, The Fisherman's Wharf", desc:"One starter to share, a pizza, a pasta, two drinks. Take your time.", tag:"", icon:"🍝", badge:"🍕"},
   {time:"2:45 PM", cls:"c-ink", title:"Scenic drive", desc:"Quieter roads around Osman Sagar and Himayat Sagar. No fixed destination.", tag:"~45 min", icon:"🌄", badge:"🍃"},
