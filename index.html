@@ -69,9 +69,18 @@
   .route .dot svg{ width:26px; height:26px; }
   .route .track{ position:relative; height:2px; background:none; }
   .route-line{ position:relative; height:2px; border-top:2px dashed var(--ink-soft); margin:0 -10px 8px; }
-  .traveler{ position:absolute; top:30px; left:4%; transform:translate(-50%,-50%); font-size:19px; z-index:3;
-    animation: travel 9s ease-in-out infinite alternate; filter:drop-shadow(1px 2px 0 rgba(0,0,0,0.12)); }
-  @keyframes travel{ 0%{ left:4%; } 100%{ left:94%; } }
+  .traveler{
+    position:absolute; top:30px; left:4%; transform:translate(-50%,-50%) scaleX(-1);
+    font-size:26px; line-height:1; z-index:3;
+    animation: travel 9s ease-in-out infinite alternate;
+    filter:drop-shadow(1px 3px 2px rgba(0,0,0,0.25));
+  }
+  @keyframes travel{
+    0%{ left:4%; transform:translate(-50%,-50%) scaleX(-1) rotate(0deg); }
+    48%{ transform:translate(-50%,-50%) scaleX(-1) rotate(-2deg); }
+    50%{ transform:translate(-50%,-50%) scaleX(-1) rotate(2deg); }
+    100%{ left:94%; transform:translate(-50%,-50%) scaleX(-1) rotate(0deg); }
+  }
 
   /* SECTION LABEL */
   .section-label{ display:flex; align-items:center; gap:12px; margin:60px 0 26px; }
@@ -199,15 +208,7 @@
   </section>
 
   <div class="route">
-    <div class="traveler" aria-hidden="true">
-      <svg viewBox="0 0 40 40" width="26" height="26">
-        <circle cx="9" cy="30" r="4.5" fill="none" stroke="#233229" stroke-width="2.4"/>
-        <circle cx="29" cy="30" r="4.5" fill="none" stroke="#233229" stroke-width="2.4"/>
-        <path d="M9 30 L14 18 H24 M24 18 L29 30" fill="none" stroke="#D8582E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M14 18 L11 10 H7" fill="none" stroke="#233229" stroke-width="2.4" stroke-linecap="round"/>
-        <circle cx="24" cy="14" r="3.5" fill="#2E6B62"/>
-      </svg>
-    </div>
+    <div class="traveler" aria-hidden="true">🛵</div>
     <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>Miyapur</div>
     <div class="route-line" style="flex:1"></div>
     <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#233229" stroke-width="1.6"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Temple</div>
